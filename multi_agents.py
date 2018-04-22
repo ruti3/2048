@@ -51,9 +51,11 @@ class ReflexAgent(Agent):
         board = successor_game_state.board
         max_tile = successor_game_state.max_tile
         score = successor_game_state.score
-
-        "*** YOUR CODE HERE ***"
+        emptyCells=successor_game_state.get_empty_tiles()[0].size
         return score
+        #if board[0][0] == max_tile:
+        #    return score *0.01 + emptyCells *10 + max_tile*100
+        #return  score*0.01 +emptyCells*10
 
 
 def score_evaluation_function(current_game_state):
