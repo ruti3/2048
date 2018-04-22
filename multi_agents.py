@@ -111,9 +111,37 @@ class MinmaxAgent(MultiAgentSearchAgent):
         game_state.generate_successor(agent_index, action):
             Returns the successor game state after an agent takes an action
         """
-        """*** YOUR CODE HERE ***"""
-        util.raiseNotDefined()
 
+        return self.maxChild(game_state,self.depth)[1]
+
+    def maxChild(self,Current_state,depth):
+        if depth==0:
+            return (self.evaluation_function(Current_state),Action.STOP)
+        legalActions=Current_state.get_legal_actions(0)
+        "get maxScore to minus inifity"
+
+        maxScore=-1000
+        maxAction=Action.STOP
+        for action in legalActions:
+            minStep=self.minChild(Current_state.generate_successor(0, action), depth - 1)[0]
+            if minStep>maxScore:
+                maxAction=action
+                maxScore=minStep
+        return (maxScore,maxAction)
+    def minChild(self,Current_state,depth):
+        if depth==0:
+            return (self.evaluation_function(Current_state),Action.STOP)
+        legalActions=Current_state.get_legal_actions(1)
+        "get maxScore to inifity"
+
+        minScore = 1000000
+        minAction = Action.STOP
+        for action in legalActions:
+            maxStep = self.maxChild(Current_state.generate_successor(1, action), depth - 1)[0]
+            if maxStep < minScore:
+                minAction = action
+                minScore = maxStep
+        return (minScore, minAction)
 
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
