@@ -53,18 +53,18 @@ class ReflexAgent(Agent):
         score = successor_game_state.score
         emptyCells=successor_game_state.get_empty_tiles()[0].size
 
-        sum = 0
-        for row in board:
-            for col in range(3):
-                sum += abs(row[col]-row[col+1])
-
-        for col in range(4):
-            for row in range(3):
-                sum += abs(board[row][col]-board[row+1][col])
-        return sum
-        #if board[0][0] == max_tile:
-        #    return score *0.01 + emptyCells *10 + max_tile*100
-        #return  score*0.01 +emptyCells*10
+        #sum = 0
+        #for row in board:
+        #    for col in range(3):
+        #        sum += abs(row[col]-row[col+1])
+        #
+        #for col in range(4):
+        #    for row in range(3):
+        #        sum += abs(board[row][col]-board[row+1][col])
+        #return sum
+        if board[0][0] == max_tile:
+            return score *0.01 + emptyCells *10 + max_tile*100
+        return  score*0.01 +emptyCells*10
 
 
 def score_evaluation_function(current_game_state):
@@ -129,10 +129,10 @@ class MinmaxAgent(MultiAgentSearchAgent):
         legalActions=Current_state.get_legal_actions(0)
         "get maxScore to minus inifity"
 
-        maxScore=-1000
+        maxScore=-float("inf")
         maxAction=Action.STOP
         for action in legalActions:
-            minStep=self.minChild(Current_state.generate_successor(0, action), depth - 1)[0]
+            minStep=self.minChild(Current_state.generate_successor(0, action), depth)[0]
             if minStep>maxScore:
                 maxAction=action
                 maxScore=minStep
@@ -168,12 +168,12 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
         if depth==0 or len(game_State.get_legal_actions(playerIndex))==0:
             return (self.evaluation_function(game_State),Action.STOP)
 
-        if playerIndex == 0 : #max player - our player
+        if playerIndex == 0 : #max player is our player
             #alpha=-inifity
             score = -float("inf")
             currentBest=Action.STOP
             for action in game_State.get_legal_actions(0):
-                currentScore = self.alphabeta(game_State.generate_successor(0, action),depth-1,alpha,beta,1)
+                currentScore = self.alphabeta(game_State.generate_successor(0, action),depth,alpha,beta,1)
                 if currentScore[0] > score:
                     score=currentScore[0]
                     currentBest=action
@@ -181,7 +181,7 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
                 if beta <=alpha:
                     break
             return (score,currentBest)
-        else:
+        else: # computer player
             score = float("inf")
             currentBest=Action.STOP
             for action in game_State.get_legal_actions(1):
@@ -210,9 +210,6 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
         """
         """*** YOUR CODE HERE ***"""
         util.raiseNotDefined()
-
-
-
 
 
 def better_evaluation_function(current_game_state):
