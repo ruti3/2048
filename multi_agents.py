@@ -209,7 +209,7 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
         return self.maxChild(game_state,self.depth)[1]
 
     def maxChild(self,Current_state,depth):
-        if depth==0:
+        if depth==0 or len(Current_state.get_legal_actions(0))==0:
             return (self.evaluation_function(Current_state),Action.STOP)
         legalActions=Current_state.get_legal_actions(0)
 
@@ -238,7 +238,7 @@ def better_evaluation_function(current_game_state):
 
     DESCRIPTION: <write something here so we know what you did>
     """
-    Weights= [1,10,10]
+    Weights= [1,10,5]
 
     board = current_game_state.board
     max_tile = current_game_state.max_tile
