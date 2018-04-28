@@ -127,7 +127,6 @@ class MinmaxAgent(MultiAgentSearchAgent):
         if depth==0:
             return (self.evaluation_function(Current_state),Action.STOP)
         legalActions=Current_state.get_legal_actions(0)
-        "get maxScore to minus inifity"
 
         maxScore=-float("inf")
         maxAction=Action.STOP
@@ -142,8 +141,7 @@ class MinmaxAgent(MultiAgentSearchAgent):
             return (self.evaluation_function(Current_state),Action.STOP)
         legalActions=Current_state.get_legal_actions(1)
         "get maxScore to inifity"
-
-        minScore = 1000000
+        minScore = float("inf")
         minAction = Action.STOP
         for action in legalActions:
             maxStep = self.maxChild(Current_state.generate_successor(1, action), depth - 1)[0]
@@ -208,8 +206,30 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
         The opponent should be modeled as choosing uniformly at random from their
         legal moves.
         """
-        """*** YOUR CODE HERE ***"""
-        util.raiseNotDefined()
+        return self.maxChild(game_state,self.depth)[1]
+
+    def maxChild(self,Current_state,depth):
+        if depth==0:
+            return (self.evaluation_function(Current_state),Action.STOP)
+        legalActions=Current_state.get_legal_actions(0)
+
+        maxScore=-float("inf")
+        maxAction=Action.STOP
+        for action in legalActions:
+            maxStep=self.expectedNode(Current_state.generate_successor(0, action), depth)
+            if maxStep>maxScore:
+                maxAction=action
+                maxScore=maxStep
+        return (maxScore,maxAction)
+    def expectedNode(self,Current_state,depth):
+        legalActions=Current_state.get_legal_actions(1)
+        average=0
+        counter=0
+        for action in legalActions:
+            average += self.maxChild(Current_state.generate_successor(1, action), depth - 1)[0]
+            counter +=1
+        return average/counter
+
 
 
 def better_evaluation_function(current_game_state):
@@ -218,8 +238,24 @@ def better_evaluation_function(current_game_state):
 
     DESCRIPTION: <write something here so we know what you did>
     """
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    successor_game_state = current_game_state.generate_successor()
+    board = successor_game_state.board
+    max_tile = successor_game_state.max_tile
+    score = successor_game_state.score
+    emptyCells = successor_game_state.get_empty_tiles()[0].size
+
+    sum = 0
+    for row in board:
+        for col in range(4):
+            sum += row[col]
+    #
+    # for col in range(4):
+    #    for row in range(3):
+    #        sum += abs(board[row][col]-board[row+1][col])
+    # return sum
+    # if board[0][0] == max_tile:
+    return sum + emptyCells * 10 + max_tile * 100
+    # return  sum +emptyCells*10
 
 
 # Abbreviation
