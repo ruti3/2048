@@ -238,25 +238,49 @@ def better_evaluation_function(current_game_state):
 
     DESCRIPTION: <write something here so we know what you did>
     """
-    successor_game_state = current_game_state.generate_successor()
-    board = successor_game_state.board
-    max_tile = successor_game_state.max_tile
-    score = successor_game_state.score
-    emptyCells = successor_game_state.get_empty_tiles()[0].size
+    Weights= [1,10,100]
+
+    board = current_game_state.board
+    max_tile = current_game_state.max_tile
+    emptyCells = current_game_state.get_empty_tiles()[0].size
 
     sum = 0
     for row in board:
         for col in range(4):
             sum += row[col]
-    #
-    # for col in range(4):
-    #    for row in range(3):
-    #        sum += abs(board[row][col]-board[row+1][col])
-    # return sum
-    # if board[0][0] == max_tile:
-    return sum + emptyCells * 10 + max_tile * 100
-    # return  sum +emptyCells*10
 
+    return sum * Weights[0]\
+        + emptyCells * Weights[1]\
+        + max_tile * Weights[2]\
+        + bonusPoints(board,max_tile)
+
+    # return  sum +emptyCells*10
+def bonusPoints(board,maxTitle):
+    firstCell=board[0][0]
+    if firstCell == maxTitle or board[-1][-1] == maxTitle:
+        count=2
+    else:
+        count=1
+    for row in range(4):
+        if row % 2 == 0:
+            flag = True
+            firstCell = board[row][0]
+            for col in range(4):
+                if firstCell < board[row][col]:
+                    flag=False
+                    break
+                else :
+                    firstCell=board[row][col]
+        elif flag:
+            firstCell = board[row][3]
+            for col in reversed(range(4)):
+                if firstCell < board[row][col]:
+                    flag=False
+                    break
+                else :
+                    firstCell=board[row][col]
+        if flag : count+=100
+    return count * 1000
 
 # Abbreviation
 better = better_evaluation_function
