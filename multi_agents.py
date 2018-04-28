@@ -53,18 +53,18 @@ class ReflexAgent(Agent):
         score = successor_game_state.score
         emptyCells=successor_game_state.get_empty_tiles()[0].size
 
-        #sum = 0
-        #for row in board:
-        #    for col in range(3):
-        #        sum += abs(row[col]-row[col+1])
+        sum = 0
+        for row in board:
+            for col in range(4):
+                sum += row[col]
         #
         #for col in range(4):
         #    for row in range(3):
         #        sum += abs(board[row][col]-board[row+1][col])
         #return sum
-        if board[0][0] == max_tile:
-            return score *0.01 + emptyCells *10 + max_tile*100
-        return  score*0.01 +emptyCells*10
+        #if board[0][0] == max_tile:
+        return sum + emptyCells *10 + max_tile*100
+        #return  sum +emptyCells*10
 
 
 def score_evaluation_function(current_game_state):
