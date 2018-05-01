@@ -265,15 +265,31 @@ def bonusPoints(Given_board,maxTile):
                 board[0][col]=0
             else: return (col+1)*1000
         return 10000
-
+    elif board[0][-1]==maxTile: # first line top left corner
+        NextCell=board[0][-1]
+        for col in reversed(range(4)):
+            if NextCell >= np.max(board):
+                NextCell=board[0][col]
+                board[0][col]=0
+            else: return (col+1)*900
+        return 8000
+    elif board[-1][0] == maxTile:  # first line top left corner
+        NextCell = board[-1][0]
+        for col in range(4):
+            if NextCell >= np.max(board):
+                NextCell = board[-1][col]
+                board[-1][col] = 0
+            else:
+                return (col + 1) * 900
+        return 8000
     elif board[-1][-1]==maxTile: # first line top left corner
         NextCell=board[-1][-1]
         for col in reversed(range(4)):
             if NextCell >= np.max(board):
                 NextCell=board[-1][col]
                 board[-1][col]=0
-            else: return (col+1)*1000
-        return 10000
+            else: return (col+1)*900
+        return 8000
     return 0
 
 # Abbreviation
