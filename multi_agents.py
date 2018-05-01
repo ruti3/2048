@@ -238,7 +238,7 @@ def better_evaluation_function(current_game_state):
 
     DESCRIPTION: <write something here so we know what you did>
     """
-    Weights= [1,10,5]
+    Weights= [1,10,15]
 
     board = current_game_state.board
     max_tile = current_game_state.max_tile
@@ -256,16 +256,24 @@ def better_evaluation_function(current_game_state):
 
     # return  sum +emptyCells*10
 def bonusPoints(Given_board,maxTile):
-    board =[row[:] for row in Given_board]
-    firstCell=board[0][0]
-    if not firstCell==maxTile: # first line top left corner
-        return 0
-    for col in range(4):
-        if firstCell >= np.max(board):
-            firstCell=board[0][col]
-            board[0][col]=0
-        else: return (col+1)*1000
-    return 10000
+    board =[row[:] for row in Given_board] #copy the given board so we can change it
+    if board[0][0]==maxTile: # first line top left corner
+        NextCell = board[0][0]
+        for col in range(4):
+            if NextCell >= np.max(board):
+                NextCell=board[0][col]
+                board[0][col]=0
+            else: return (col+1)*1000
+        return 10000
+    elif board[0][-1]==maxTile: # first line top left corner
+        NextCell=board[0][-1]
+        for col in reversed(range(4)):
+            if NextCell >= np.max(board):
+                NextCell=board[0][col]
+                board[0][col]=0
+            else: return (col+1)*900
+        return 8000
+    return 0
 
 # Abbreviation
 better = better_evaluation_function
